@@ -20,31 +20,29 @@ const routes = [
         redirect: '/admin/user',
         children: [
             {
-                path: "/user",
+                path: "user",
                 name: "user",
                 component: User,
             },
             {
-                path: "/classify",
+                path: "classify",
                 name: "classify",
                 component: Classify,
             },
             {
-                path: "/article",
+                path: "article",
                 name: "article",
                 component: Article,
-                children: [
-                    {
-                        path: "/create",
-                        name: "create",
-                        component: ArticleCreate,
-                    },
-                    {
-                        path: "/edit",
-                        name: "edit",
-                        component: ArticleEdit,
-                    },
-                ]
+            },
+            {
+                path: "article/create",
+                name: "create",
+                component: ArticleCreate,
+            },
+            {
+                path: "article/edit",
+                name: "edit",
+                component: ArticleEdit,
             },
         ]
     },
