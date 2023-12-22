@@ -3,7 +3,7 @@ exports.seed = function (knex) {
         knex('users').insert([
             { phone: '123456', password: '111' }
         ]),
-        knex('categories').insert([
+        knex('classify').insert([
             { name: '技术动态' },
             { name: '极客新闻' },
             { name: '通知公告' },

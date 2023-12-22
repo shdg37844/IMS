@@ -9,7 +9,7 @@ exports.up = function (knex) {
             table.timestamp('visited_at').defaultTo(knex.fn.now());
         })
         // 分类
-        .createTable('categories', function (table) {
+        .createTable('classify', function (table) {
             table.increments('id');
             table.string('name', 255).notNullable();
             table.timestamp('created_at').defaultTo(knex.fn.now());
@@ -29,6 +29,6 @@ exports.up = function (knex) {
 exports.down = function (knex) {
     return knex.schema
         .dropTable("users")
-        .dropTable("categories")
+        .dropTable("classify")
         .dropTable("articles")
 };

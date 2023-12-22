@@ -1,6 +1,7 @@
 <template>
     <a href="" style="margin-bottom: 24px;display: inline-block;">返回文章列表</a>
-    <el-form label-width="100px" style="max-width: 1000px">
+    <el-form label-width="100px" style="max-width: 10 
+    00px">
         <el-form-item label="标题">
             <el-input />
         </el-form-item>
