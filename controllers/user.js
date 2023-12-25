@@ -38,7 +38,7 @@ const userController = {
         }
 
         try {
-            const users = await User.update(id, { phone, password});
+            const users = await User.update(id, { phone, password });
             res.json({ code: 200, data: users })
         } catch (e) {
             res.json({ code: 0, data: e })
@@ -53,7 +53,7 @@ const userController = {
         }
 
         try {
-            const users = await User.delete({ id });
+            const users = await User.delete(id);
             res.json({ code: 200, data: users })
         } catch (e) {
             res.json({ code: 0, data: e })
