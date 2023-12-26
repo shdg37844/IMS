@@ -51,7 +51,7 @@ const classifyController = {
         }
 
         try {
-            const classify = await Classify.delete({ id });
+            const classify = await Classify.delete(id);
             res.json({ code: 200, data: classify })
         } catch (e) {
             res.json({ code: 0, data: e })

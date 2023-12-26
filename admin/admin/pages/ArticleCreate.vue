@@ -1,5 +1,5 @@
 <template>
-    <a href="" style="margin-bottom: 24px;display: inline-block;">返回文章列表</a>
+    <a href="" style="margin-bottom: 24px;display: inline-block;" @click="$router.push('/admin/article')">返回文章列表</a>
     <el-form label-width="100px" style="max-width: 10 
     00px">
         <el-form-item label="标题">

@@ -48,7 +48,12 @@
             </el-table-column>
             <el-table-column label="操作">
                 <template #default="scope">
-                    <el-button link type="primary" size="small" @click="dialogEditVisible = true">编辑</el-button>
+                    <el-button link type="primary" size="small" @click="dialogEditVisible = true">
+                        <el-icon>
+                            <EditPen />
+                        </el-icon>
+                        编辑
+                    </el-button>
                     <el-dialog v-model="dialogEditVisible" title="编辑用户">
                         <el-form :model="form">
                             <el-form-item label="手机号码" :label-width="formLabelWidth">
@@ -68,7 +73,12 @@
                         </template>
                     </el-dialog>
 
-                    <el-button link type="primary" size="small" @click="deleteUser(scope.row)">删除</el-button>
+                    <el-button link type="primary" size="small" @click="deleteUser(scope.row)">
+                        <el-icon>
+                            <Delete />
+                        </el-icon>
+                        删除
+                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -76,6 +86,7 @@
 </template>
 
 <script setup>
+import { Delete, EditPen } from '@element-plus/icons-vue';
 import { ref } from 'vue';
 import user from './../models/user';
 const users = ref([]);
@@ -147,8 +158,10 @@ const editUser = async (editItem) => {
     try {
         const response = await user.editUsers(id, userData);
         if (response.data.code === 200) {
-            users.value = response.data.data;
-            dialogFormVisible.value = false;
+            let index = users.value.findIndex(item => item.id === id);
+            users.value[index] = response.data.data;
+            dialogEditVisible.value = false;
+            form.value = { phone: '', password: '' };
         } else {
             console.error(response.data.message);
         }

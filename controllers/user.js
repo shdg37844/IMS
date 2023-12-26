@@ -39,9 +39,10 @@ const userController = {
 
         try {
             const users = await User.update(id, { phone, password });
+            console.log('users',users)
             res.json({ code: 200, data: users })
         } catch (e) {
-            res.json({ code: 0, data: e })
+            res.json({ code: 0, message: e.message });
         }
     },
     delete: async function (req, res, next) {

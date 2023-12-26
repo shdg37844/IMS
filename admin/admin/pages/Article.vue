@@ -1,6 +1,6 @@
 <template>
     <div class="table-box">
-        <a href="" style="margin-bottom: 24px;display: inline-block;">新建文章</a>
+        <a href="" style="margin-bottom: 24px;display: inline-block;" @click="$router.push('/admin/article/create')">新建文章</a>
         <el-table :data="tableData" style="width: 100%;">
             <el-table-column label="index">
                 <template #default="scope">
