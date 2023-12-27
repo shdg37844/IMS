@@ -19,20 +19,20 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref } from 'vue';
+import auth from './../models/auth';
+import router from './../src/router/index';
 const ruleFormRef = ref(null);
 const ruleForm = reactive({
     pass: '',
     phone: '',
 })
-
 const checkPhone = (rule, value, callback) => {
     if (!value) {
         return callback(new Error('请输入手机号码'))
     }
     callback();
 }
-
 const validatePass = (rule, value, callback) => {
     if (value === '') {
         callback(new Error('请输入登录密码'))
@@ -40,13 +40,11 @@ const validatePass = (rule, value, callback) => {
         callback();
     }
 }
-
 const rules = reactive({
     pass: [{ validator: validatePass, trigger: 'blur' }],
     phone: [{ validator: checkPhone, trigger: 'blur' }],
 })
-
-const submitForm = () => {
+const submitForm = async () => {
     if (!ruleFormRef.value) return
     ruleFormRef.value.validate((valid) => {
         if (valid) {
@@ -56,6 +54,28 @@ const submitForm = () => {
             return false
         }
     })
+    const authData = {
+        phone: ruleForm.phone,
+        password: ruleForm.pass
+    }
+
+    try {
+        const response = await auth.AuthLogin(authData);
+        if (response.data.code === 200) {
+            if (response.data && response.data.data.token) {
+                localStorage.setItem('token', response.data.data.token);
+                router.push('/admin/article');
+                alert('登录成功！');
+            }else {
+                console.error(response.data.data);
+            }
+        } else {
+            console.error(response.data.data);
+            alert('登录失败！');
+        }
+    } catch (e) {
+        console.error(e);
+    }
 }
 </script>
 

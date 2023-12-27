@@ -4,9 +4,10 @@ var authController = require('./../controllers/auth.js');
 var userController = require('./../controllers/user.js');
 var classifyController = require('./../controllers/classify.js');
 var articleController = require('./../controllers/article.js');
+var authController = require('./../controllers/auth.js');
 
 //登录页api
-//router.post('/login', authController.login);
+router.post('/login', authController.login);
 
 //用户管理api
 router.post('/user', userController.insert);

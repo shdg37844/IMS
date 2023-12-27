@@ -4,7 +4,7 @@
 
         <div class="page-mainer">
             <div class="page-mainer-top">
-                <el-button>
+                <el-button @click="logout">
                     <el-icon>
                         <Headset />
                     </el-icon>
@@ -21,7 +21,23 @@
 <script setup>
 import { Headset } from '@element-plus/icons-vue';
 import MainBar from './../src/components/MainBar.vue';
+import router from './../src/router/index';
+import auth from './../models/auth';
 
+const logout = async () => {
+    try {
+        const response = await auth.AuthLogout();
+        if (response.data.code === 200) {
+            localStorage.removeItem('token');
+            router.push('/admin/login');
+        } else {
+            console.error(response.data.data);
+        }
+    } catch (e) {
+        console.error(e);
+    }
+
+}
 </script>
 
 <style scoped lang="less">
@@ -36,10 +52,11 @@ import MainBar from './../src/components/MainBar.vue';
             justify-content: end;
             height: 80px;
             align-items: center;
-            padding:24px;
+            padding: 24px;
         }
+
         .page-mainer-bottom {
-            padding:24px;
+            padding: 24px;
             border-top: 1px solid var(--el-menu-border-color);
         }
     }
