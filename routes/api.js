@@ -6,6 +6,7 @@ var classifyController = require('./../controllers/classify.js');
 var articleController = require('./../controllers/article.js');
 var authController = require('./../controllers/auth.js');
 
+
 //登录页api
 router.post('/login', authController.login);
 

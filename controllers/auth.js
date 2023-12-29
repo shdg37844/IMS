@@ -12,7 +12,6 @@ const authController = {
             res.json({ code: 0, data: 'params empty!' });
             return
         }
-
         try {
             const users = await User.select({ phone, password });
             const user = users[0];
@@ -32,11 +31,9 @@ const authController = {
 
         }
     },
-    logout:function (req, res, next) {
-
+    logout: function (req, res, next) {
         res.clearCookie('web_token');
-
-        res.json({ code: 200, message: '退出成功！' }); 
+        res.json({ code: 200, message: '退出成功！' });
     }
 }
 

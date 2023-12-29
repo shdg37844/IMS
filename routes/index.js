@@ -4,6 +4,7 @@ var userController = require('./../controllers/user.js');
 var classifyController = require('./../controllers/classify.js');
 var articleController = require('./../controllers/article.js');
 var authController = require('./../controllers/auth.js');
+var qiniuController = require('./../controllers/qiniu.js');
 
 //用户管理api
 router.get('/user', userController.getAllUsers);
@@ -17,6 +18,6 @@ router.get('/article', articleController.getAllArticles);
 //router.get('/article?classify_id=1', articleController);
 router.get('/article/:id', articleController.getSomeArticle);
 
-
+router.get('/qiniu-uploadtoken', qiniuController.uploadToken);
 
 module.exports = router;
