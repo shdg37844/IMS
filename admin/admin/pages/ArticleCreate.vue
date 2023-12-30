@@ -20,21 +20,21 @@
             <div>
                 <!-- 图片上传组件 -->
                 <el-upload class="avatar-uploader" :action="serverUrl" name="img" :headers="header" :show-file-list="false"
-                    :on-success="uploadSuccess" :on-error="uploadError" :before-upload="beforeUpload">
+                    :before-upload="beforeUpload" :on-success="uploadSuccess" :on-error="uploadError">
+                    <input type="file" id="fileInput" style="display: none" />
                 </el-upload>
 
                 <!-- 富文本编辑器组件 -->
                 <el-row v-loading="quillUpdateImg">
-                    <QuillEditor v-model="detailContent" ref="myQuillEditor" :options="editorOption"  />
+                    <QuillEditor v-model="detailContent" ref="myQuillEditor" :options="editorOption" />
                 </el-row>
             </div>
-            <input type="file" id="fileInput" style="display: none" accept="image/*" />
         </el-form-item>
     </el-form>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { ElUpload, ElRow, ElMessage } from 'element-plus';
 import { QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
@@ -108,6 +108,7 @@ const getQiniuToken = async () => {
 };
 getQiniuToken();
 
+
 // 方法定义
 // 富文本图片上传前
 const beforeUpload = () => {
@@ -118,7 +119,7 @@ const beforeUpload = () => {
 const uploadSuccess = (res, file) => {
     let quill = myQuillEditor.value.getQuill();  // 获取富文本组件实例
     // 如果上传成功
-    if (res.status === 200 && res.info !== null) {
+    if (res.code === 200 && res.info !== null) {
         let length = quill.getSelection(true).index;  // 获取光标所在位置
         quill.insertEmbed(length, 'image', res.info);  // 插入图片  res.info为服务器返回的图片地址
         quill.setSelection(length + 1);  // 调整光标到最后
@@ -128,13 +129,13 @@ const uploadSuccess = (res, file) => {
     quillUpdateImg.value = false;  // loading动画消失
 };
 // 上传图片失败
-const uploadError = () => {
+const uploadError = (err, file) => {
+    console.error("Upload error triggered", err, file);
+    console.error("Error details:", err.response); // 打印错误详细信息
     quillUpdateImg.value = false;  // loading动画消失
     ElMessage.error('图片插入失败');
 };
 
 </script>
 
-<style scoped lang="less">
-
-</style>
+<style scoped lang="less"></style>

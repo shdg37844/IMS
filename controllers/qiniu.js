@@ -8,6 +8,7 @@ const qiniuController = {
             const mac = new qiniu.auth.digest.Mac(ACCESSKEY, SECRETKEY);
             const options = {
                 scope: 'aitschool', // 空间名称
+                expires: 129600
             };
             const putPolicy = new qiniu.rs.PutPolicy(options);
             const uploadToken = putPolicy.uploadToken(mac);

@@ -8,14 +8,19 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
-
+var nunjucks = require('nunjucks');
 var app = express();
 
 var filters = require('./filters/index');
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+
+// 视图模版设置
+app.set('view engine', 'tpl');
+nunjucks.configure('views', {
+  autoescape: true,
+  express: app,
+  watch: true
+});
 
 app.use(logger('dev'));
 app.use(express.json());

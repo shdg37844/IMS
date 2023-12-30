@@ -11,6 +11,7 @@
     "seed:run": "knex seed:run"
   },
   "dependencies": {
+    "chokidar": "^3.5.3",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^16.3.1",
@@ -21,6 +22,7 @@
     "knex": "^3.1.0",
     "morgan": "~1.9.1",
     "mysql": "^2.18.1",
+    "nunjucks": "^3.2.4",
     "qiniu": "^7.11.0"
   }
 }

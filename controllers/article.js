@@ -1,4 +1,4 @@
-const articleModel = require('./../models/users.js');
+const articleModel = require('./../models/articles.js');
 const Article = new articleModel();
 
 const articleController = {
