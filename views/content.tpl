@@ -16,13 +16,11 @@
     </div>
     <div class="mainer">
         <div class="content">
-            {% for article in articles %}
             <div class="article-detail">
-                <h1 class="article-title">{{article.title}}</h1>
-                <div class="article-time">{{article.created_at}}</div>
-                <div class="article-text">{{article.content}}</div>
+                <h1 class="article-title">{{content.title}}</h1>
+                <div class="article-time">{{content.created_at}}</div>
+                <div class="article-text">{{content.content}}</div>
             </div>
-            {% endfor %}  
         </div>
     </div>
 <div>

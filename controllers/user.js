@@ -21,10 +21,10 @@ const userController = {
         }
 
         try {
-            const users = await User.insert({ phone, password });
-            res.json({ code: 200, data: users })
+            const insertId = await User.insert({ phone, password });  //insert返回的是新增对象的id，而不是完整内容
+            res.json({ code: 200, data: insertId })
         } catch (e) {
-            res.json({ code: 0, data: e })
+            res.json({ code: 0, message: e.message })
         }
     },
     edit: async function (req, res, next) {
@@ -39,7 +39,7 @@ const userController = {
 
         try {
             const users = await User.update(id, { phone, password });
-            console.log('users',users)
+            console.log('users', users)
             res.json({ code: 200, data: users })
         } catch (e) {
             res.json({ code: 0, message: e.message });

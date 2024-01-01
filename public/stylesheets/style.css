@@ -1,0 +1,32 @@
+.detail-content {
+    width: 1100px;
+    background-color: #fff;
+    padding: 0 40px;
+
+    .detail-box {
+        display: flex;
+        gap: 35px;
+        align-items: center;
+        padding: 30px 0;
+        border-bottom: 1px solid #eeebee;
+
+        .detail-box-id {
+            font-size: 20px;
+            color: #ff6725;
+            font-weight: 700;
+        }
+
+        .detail-title {
+            color: #6da652;
+            font-size: 23px;
+            line-height: 35px;
+            font-weight: 400;
+        }
+
+        .detail-time {
+            color: #868386;
+            font-size: 14px;
+            font-weight: 500;
+        }
+    }
+}

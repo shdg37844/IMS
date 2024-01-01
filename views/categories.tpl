@@ -2,6 +2,7 @@
 
 {% block css %}
 <link rel="stylesheet" href="/stylesheets/navBar.css">
+<link rel="stylesheet" href="/stylesheets/style.css">
 {% endblock %}
 
 {% block content %}
@@ -15,13 +16,15 @@
         </div>
     </div>
     <div class="mainer">
-        <div class="content">
+        <div class="detail-content">
             {% for article in articles %}
-            <div class="article-detail">
-                <h1 class="article-title">{{article.title}}</h1>
-                <div class="article-time">{{article.created_at}}</div>
-                <div class="article-text">{{article.content}}</div>
-            </div>
+            <a href="/articles/{{article.id}}" class="detail-box">
+                <div class="detail-box-id">{{article.id}}</div>
+                <div class="detail-box-text">
+                    <h1 class="detail-title">{{article.title}}</h1>
+                    <div class="detail-time">{{article.created_at}}</div>
+                </div>
+            </a>
             {% endfor %}  
         </div>
     </div>

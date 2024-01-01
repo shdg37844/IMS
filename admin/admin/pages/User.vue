@@ -97,12 +97,6 @@ const formLabelWidth = '140px'
 const form = ref({
     phone: '',
     password: '',
-    date1: '',
-    date2: '',
-    delivery: false,
-    type: [],
-    resource: '',
-    desc: '',
 })
 const fetchUsers = async () => {
     try {
@@ -122,7 +116,9 @@ const createUser = async () => {
     try {
         const response = await user.insertUsers(userData);
         if (response.data.code === 200) {
-            users.value.push(response.data);
+            const insertedId = response.data.data[0]
+            const newUser = { id: insertedId, ...userData };
+            users.value.push(newUser);
             dialogFormVisible.value = false;
             form.value = { phone: '', password: '' };
         } else {
@@ -158,8 +154,11 @@ const editUser = async (editItem) => {
     try {
         const response = await user.editUsers(id, userData);
         if (response.data.code === 200) {
+            console.log('返回fffff', response.data.data)
             let index = users.value.findIndex(item => item.id === id);
             users.value[index] = response.data.data;
+
+
             dialogEditVisible.value = false;
             form.value = { phone: '', password: '' };
         } else {

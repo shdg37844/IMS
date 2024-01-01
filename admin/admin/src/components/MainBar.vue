@@ -3,7 +3,7 @@
         <div
             style="height:81px;border-bottom: 1px solid var(--el-menu-border-color);border-right: 1px solid var(--el-menu-border-color);">
         </div>
-        <el-menu default-active="1" class="el-menu-vertical-demo">
+        <el-menu :default-active="activeIndex" class="el-menu-vertical-demo">
             <el-menu-item index="1" @click="$router.push('/admin/user')">
                 <el-icon>
                     <Calendar />
@@ -34,7 +34,29 @@
 </template>
 
 <script setup>
-import { Calendar, Setting, } from '@element-plus/icons-vue'
+import { Calendar, Setting, } from '@element-plus/icons-vue';
+import { ref, watch, watchEffect } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const activeIndex = ref('');
+
+watchEffect(() => {
+    if (route.path === '/admin/user') {
+        activeIndex.value = '1';
+    } else if (route.path === ('/admin/classify')) {
+        activeIndex.value = '2';
+    } else if (route.path.startsWith('/admin/article')) {
+        if (route.path === ('/admin/article')) {
+            activeIndex.value = '3-1';
+        } else if (route.path === ('/admin/article/create')) {
+            activeIndex.value = '3-2';
+        }
+    } else {
+        activeIndex.value = '';
+    }
+});
+
 </script>
 
 <style scoped lang="less">

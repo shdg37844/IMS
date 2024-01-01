@@ -20,13 +20,25 @@ const viewArticleController = {
             const classify = await ViewClassify.all();
             const category = req.query.category;
             const articles = await ViewArticle.select({ category: category });
-            res.render('technique.tpl', { articles: articles, classify: classify });
+            res.render('categories.tpl', { articles: articles, classify: classify });
         }
         catch (e) {
             res.locals.error = e;
             res.render('error', res.locals)
         }
     },
+    showContent: async function (req, res, next) {
+        try {
+            const classify = await ViewClassify.all();
+            const id = req.params.id;
+            const content = await ViewArticle.select({ id: id });
+            res.render('content.tpl', { classify: classify, content: content[0] });
+    }
+        catch(e) {
+        res.locals.error = e;
+        res.render('error', res.locals)
+    }
+},
 }
 
 module.exports = viewArticleController;

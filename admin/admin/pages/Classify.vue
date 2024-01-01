@@ -106,7 +106,9 @@ const createClassify = async () => {
     try {
         const response = await classify.insertClassifyData(classifyName);
         if (response.data.code === 200) {
-            classifyData.value.push(response.data.data);
+            const insertedId = response.data.data[0];
+            const newClassify = { id: insertedId, ...classifyName }
+            classifyData.value.push(newClassify);
             dialogFormVisible.value = false;
             form.value = { name: '' };
         } else {
@@ -143,7 +145,7 @@ const deleteClassify = async (selectedItem) => {
         const response = await classify.deleteClassify(id);
         if (response.data.code === 200) {
             let index = classifyData.value.findIndex(item => item.id === id);
-            classifyData.value.splice(index,1);
+            classifyData.value.splice(index, 1);
         } else {
             console.error(response.data.message);
         }

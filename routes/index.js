@@ -17,12 +17,12 @@ router.get('/classify', classifyController.getAllClassify);
 //文章管理api
 router.get('/article', articleController.getAllArticles);
 router.get('/article/:id', articleController.getSomeArticle);
-
 router.get('/qiniu-uploadtoken', qiniuController.uploadToken);
 
 
 //前台页面
 router.get('/homepage', viewArticleController.showHomepage);
 router.get('/articles', viewArticleController.showCategory);
+router.get('/articles/:id', viewArticleController.showContent);
 
 module.exports = router;

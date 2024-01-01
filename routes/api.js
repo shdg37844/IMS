@@ -21,9 +21,10 @@ router.put('/classify/:id', classifyController.edit)
 router.delete('/classify/:id', classifyController.delete)
 
 //文章管理api
+router.get('/article/:id', articleController.getSomeArticle);
 router.post('/article', articleController.insert);
-router.put('/article/:id', articleController.edit)
-router.delete('/article/:id', articleController.delete)
+router.put('/article/:id', articleController.edit);
+router.delete('/article/:id', articleController.delete);
 
 
 module.exports = router;

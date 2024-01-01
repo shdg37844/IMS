@@ -1,22 +1,15 @@
 <template>
-    <a href="" style="margin-bottom: 24px;display: inline-block;" @click="$router.push('/admin/article')">返回文章列表</a>
-    <el-form label-width="100px" style="max-width: 10 
-    00px">
+    <a href="/admin/article" style="margin-bottom: 24px;display: inline-block;">返回文章列表</a>
+    <el-form :model="form" label-width="100px" style="max-width: 1000px">
         <el-form-item label="标题">
-            <el-input v-model="titleContent" />
+            <el-input v-model="form.title" />
         </el-form-item>
         <el-form-item label="分类" prop="region">
-            <el-select placeholder="">
-                <el-option label="技术动态" value="技术动态" />
-                <el-option label="极客新闻" value="极客新闻" />
-                <el-option label="通知公告" value="通知公告" />
-                <el-option label="技术热点" value="技术热点" />
-                <el-option label="新课列表" value="新课列表" />
+            <el-select placeholder="请选择文章分类" v-model="form.category">
+                <el-option v-for="item in classifyData" :label="item.name" :key="item.id" :value="item.name" />
             </el-select>
         </el-form-item>
         <el-form-item label="内容">
-            <div ref="editor"></div>
-
             <div>
                 <!-- 图片上传组件 -->
                 <el-upload class="avatar-uploader" :action="serverUrl" name="img" :headers="header" :show-file-list="false"
@@ -26,26 +19,66 @@
 
                 <!-- 富文本编辑器组件 -->
                 <el-row v-loading="quillUpdateImg">
-                    <QuillEditor v-model="detailContent" ref="myQuillEditor" :options="editorOption" />
+                    <quill-editor v-model:content="form.content"  contentType="text" ref="myQuillEditor" :options="editorOption" />
                 </el-row>
             </div>
         </el-form-item>
     </el-form>
+    <el-button type="primary" style="margin:80px 0 0 900px;" @click="submitCreate">确认新建</el-button>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { ElUpload, ElRow, ElMessage } from 'element-plus';
 import { QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import article from './../models/article';
+import classify from './../models/classify';
+const classifyData = ref([]);
+const form = ref({
+    title: '',
+    category: null,
+    content: '',
+})
 
-const titleContent = ref('');
+const fetchData = async () => {
+    try {
+        const response = await classify.getAllClassify();
+        if (response.data.code === 200) {
+            classifyData.value = response.data.data;
+        } else {
+            console.error(response.data.message);
+        }
+    } catch (e) {
+        console.error(e);
+    }
+}
+fetchData();
+
+
+const submitCreate = async () => {
+    const articleContent = {
+        title: form.value.title,
+        category: form.value.category,
+        content: form.value.content,
+    }
+    try {
+        const response = await article.insertArticle(articleContent);
+        if (response.data.code === 200) {
+            form.value = { title: '', category: null, content: '' };
+        } else {
+            console.error(response.data.message);
+        }
+    } catch (e) {
+        console.error(e);
+    }
+};
+
+
 
 // 定义响应式数据
 const serverUrl = ref('https://upload-z2.qiniup.com'); // 服务器地址
 const header = ref({}); // 请求头
-const detailContent = ref(''); // 富文本内容
 
 // 定义响应式变量
 const quillUpdateImg = ref(false); // 控制加载动画

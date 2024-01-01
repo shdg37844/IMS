@@ -20,7 +20,7 @@ const articleController = {
         }
 
         try {
-            const articles = await Article.select(id);
+            const articles = await Article.select({id:id});
             res.json({ code: 200, data: articles });
         }
         catch (e) {
@@ -71,7 +71,7 @@ const articleController = {
         }
 
         try {
-            const articles = await Article.delete({ id });
+            const articles = await Article.delete(id);
             res.json({ code: 200, data: articles })
         } catch (e) {
             res.json({ code: 0, data: e })
