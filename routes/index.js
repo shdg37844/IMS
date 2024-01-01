@@ -10,9 +10,11 @@ var viewArticleController = require('./../controllers/viewArticle.js');
 //用户管理api
 router.get('/user', userController.getAllUsers);
 router.get('/logout', authController.logout);
+router.get('/user/:id', userController.getSomeUsers);
 
 //分类管理api
 router.get('/classify', classifyController.getAllClassify);
+router.get('/classify/:id', classifyController.getSomeClassify);
 
 //文章管理api
 router.get('/article', articleController.getAllArticles);

@@ -13,14 +13,17 @@ var app = express();
 
 var filters = require('./filters/index');
 
-
-// 视图模版设置
+// Nunjucks配置
 app.set('view engine', 'tpl');
-nunjucks.configure('views', {
+var env = nunjucks.configure('views', {
   autoescape: true,
   express: app,
   watch: true
 });
+
+// 添加时间格式化过滤器到Nunjucks
+env.addFilter('formatDate', filters.formatDate);
+
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -30,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cors.allowAll);
 
-filters(app);
+filters.loginFilter(app);
 
 app.use('/', indexRouter);
 app.use('/api', apiRouter);

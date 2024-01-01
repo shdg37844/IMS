@@ -22,7 +22,7 @@
                 <div class="detail-box-id">{{article.id}}</div>
                 <div class="detail-box-text">
                     <h1 class="detail-title">{{article.title}}</h1>
-                    <div class="detail-time">{{article.created_at}}</div>
+                    <div class="detail-time">{{article.created_at | formatDate}}</div>
                 </div>
             </a>
             {% endfor %}  

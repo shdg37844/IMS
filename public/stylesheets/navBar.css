@@ -55,15 +55,23 @@ a {
       background-color: #fff;
       padding: 40px;
 
-      .article-title {
-        text-align: center;
+      .article-detail {
+        margin-bottom: 20px;
+
+        .article-title {
+          text-align: center;
+        }
+
+        .article-time {
+          color: #aeb0b1;
+          margin-top: 5px;
+          margin-bottom: 15px;
+          text-align: center;
+        }
+
       }
-      .article-time {
-        color:#aeb0b1;
-        margin-top:5px;
-        margin-bottom: 15px;
-        text-align: center;
-      }
+
+
     }
   }
 

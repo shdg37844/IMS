@@ -6,12 +6,12 @@
         </el-button>
 
         <el-dialog v-model="dialogFormVisible" title="添加用户">
-            <el-form :model="form">
+            <el-form :model="addform">
                 <el-form-item label="手机号码" :label-width="formLabelWidth">
-                    <el-input v-model="form.phone" autocomplete="off" />
+                    <el-input v-model="addform.phone" autocomplete="off" />
                 </el-form-item>
                 <el-form-item label="登录密码" :label-width="formLabelWidth">
-                    <el-input v-model="form.password" autocomplete="off" />
+                    <el-input v-model="addform.password" autocomplete="off" />
                 </el-form-item>
             </el-form>
             <template #footer>
@@ -48,7 +48,7 @@
             </el-table-column>
             <el-table-column label="操作">
                 <template #default="scope">
-                    <el-button link type="primary" size="small" @click="dialogEditVisible = true">
+                    <el-button link type="primary" size="small" @click="openEditDialog(scope.row)">
                         <el-icon>
                             <EditPen />
                         </el-icon>
@@ -66,7 +66,7 @@
                         <template #footer>
                             <span class="dialog-footer">
                                 <el-button @click="dialogEditVisible = false">取消</el-button>
-                                <el-button type="primary" @click="editUser(scope.row)">
+                                <el-button type="primary" @click="editUser">
                                     确认
                                 </el-button>
                             </span>
@@ -93,8 +93,13 @@ const users = ref([]);
 
 const dialogFormVisible = ref(false)
 const dialogEditVisible = ref(false)
+const currentEditId = ref(null);
 const formLabelWidth = '140px'
 const form = ref({
+    phone: '',
+    password: '',
+})
+const addform = ref({
     phone: '',
     password: '',
 })
@@ -108,10 +113,11 @@ const fetchUsers = async () => {
 };
 fetchUsers();
 
+
 const createUser = async () => {
     const userData = {
-        phone: form.value.phone,
-        password: form.value.password
+        phone: addform.value.phone,
+        password: addform.value.password
     };
     try {
         const response = await user.insertUsers(userData);
@@ -145,20 +151,39 @@ const deleteUser = async (selectedItem) => {
         console.error(e);
     }
 };
-const editUser = async (editItem) => {
+
+const openEditDialog = async (clickRow) => {
+    currentEditId.value = clickRow.id;  // 保存当前编辑项的ID
+    dialogEditVisible.value = true;  // 打开编辑对话框
+
+    try {
+        const response = await user.getSomeUsers(currentEditId.value);
+        if (response.data.code === 200) {
+            form.value.phone = response.data.data[0].phone;
+            form.value.password = response.data.data[0].password;
+            //form.value = { phone: '', password: '' };
+        } else {
+            console.error(response.data.message);
+        }
+    } catch (e) {
+        console.error(e);
+    }
+
+
+};
+
+const editUser = async () => {
     const userData = {
         phone: form.value.phone,
         password: form.value.password
     };
-    let id = editItem.id;
+    let id = currentEditId.value;
     try {
         const response = await user.editUsers(id, userData);
         if (response.data.code === 200) {
-            console.log('返回fffff', response.data.data)
             let index = users.value.findIndex(item => item.id === id);
-            users.value[index] = response.data.data;
-
-
+            const editItem = response.data.data[0]
+            users.value[index] = { ...editItem };
             dialogEditVisible.value = false;
             form.value = { phone: '', password: '' };
         } else {

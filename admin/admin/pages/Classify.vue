@@ -2,9 +2,9 @@
     <div class="table-box">
         <el-button type="primary" style="margin-bottom: 24px;" @click="dialogFormVisible = true">添加分类</el-button>
         <el-dialog v-model="dialogFormVisible" title="添加分类">
-            <el-form :model="form">
+            <el-form :model="addform">
                 <el-form-item label="分类名称" :label-width="formLabelWidth">
-                    <el-input v-model="form.name" autocomplete="off" />
+                    <el-input v-model="addform.name" autocomplete="off" />
                 </el-form-item>
             </el-form>
             <template #footer>
@@ -34,7 +34,7 @@
             </el-table-column>
             <el-table-column label="操作">
                 <template #default="scope">
-                    <el-button link type="primary" size="small" @click="dialogEditVisible = true">
+                    <el-button link type="primary" size="small" @click="openEditDialog(scope.row)">
                         <el-icon>
                             <EditPen />
                         </el-icon>
@@ -75,14 +75,12 @@ import classify from './../models/classify';
 const dialogFormVisible = ref(false);
 const dialogEditVisible = ref(false);
 const formLabelWidth = '140px';
+const currentEditId = ref(null);
 const form = ref({
     name: '',
-    date1: '',
-    date2: '',
-    delivery: false,
-    type: [],
-    resource: '',
-    desc: '',
+})
+const addform = ref({
+    name: '',
 })
 const classifyData = ref([]);
 const fetchClassify = async () => {
@@ -101,7 +99,7 @@ const fetchClassify = async () => {
 fetchClassify();
 const createClassify = async () => {
     const classifyName = {
-        name: form.value.name
+        name: addform.value.name
     }
     try {
         const response = await classify.insertClassifyData(classifyName);
@@ -119,8 +117,26 @@ const createClassify = async () => {
         console.error(e);
     }
 };
-const editClassify = async (selectedItem) => {
-    let id = selectedItem.id;
+
+const openEditDialog = async (clickRow) => {
+    currentEditId.value = clickRow.id;  // 保存当前编辑项的ID
+    dialogEditVisible.value = true;  // 打开编辑对话框
+
+    try {
+        const response = await classify.getSomeClassify(currentEditId.value);
+        if (response.data.code === 200) {
+            form.value.name = response.data.data[0].name;
+        } else {
+            console.error(response.data.message);
+        }
+    } catch (e) {
+        console.error(e);
+    }
+
+};
+
+const editClassify = async () => {
+    let id = currentEditId.value;
     const classifyName = {
         name: form.value.name
     }
@@ -128,7 +144,8 @@ const editClassify = async (selectedItem) => {
         const response = await classify.editClassify(id, classifyName);
         if (response.data.code === 200) {
             let index = classifyData.value.findIndex(item => item.id === id);
-            classifyData.value[index] = response.data.data;
+            const editItem = response.data.data[0];
+            classifyData.value[index] = { ...editItem };
             dialogEditVisible.value = false;
             form.value = { name: '' };
         } else {

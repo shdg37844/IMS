@@ -34,6 +34,9 @@ import { QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import article from './../models/article';
 import classify from './../models/classify';
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
 const classifyData = ref([]);
 const form = ref({
     title: '',
@@ -66,6 +69,8 @@ const submitCreate = async () => {
         const response = await article.insertArticle(articleContent);
         if (response.data.code === 200) {
             form.value = { title: '', category: null, content: '' };
+            alert('新建成功');
+            router.push('/admin/article')
         } else {
             console.error(response.data.message);
         }

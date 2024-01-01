@@ -4,6 +4,9 @@ const user = {
     getAllUsers() {
         return request.get('/user');
     },
+    getSomeUsers(id) {
+        return request.get(`/user/${id}`);
+    },
     insertUsers(userData) {
         return request.post('/api/user', userData);
     },

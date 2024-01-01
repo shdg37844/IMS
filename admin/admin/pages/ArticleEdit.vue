@@ -36,6 +36,7 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import article from './../models/article';
 import classify from './../models/classify';
 import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router'
 
 const classifyData = ref([]);
 const form = ref({
@@ -45,6 +46,7 @@ const form = ref({
     content: '',
 })
 const route = useRoute();
+const router = useRouter();
 
 const fetchData = async () => {
     try {
@@ -90,6 +92,8 @@ const submitEdit = async (selectedItem) => {
         const response = await article.editArticle(id, articleContent);
         if (response.data.code === 200) {
             form.value = { title: '', category: null, content: '' };
+            alert('修改成功');
+            router.push('/admin/article')
         } else {
             console.error(response.data.message);
         }

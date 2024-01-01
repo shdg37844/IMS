@@ -11,6 +11,22 @@ const userController = {
             res.status(500).json({ error: e.message });
         }
     },
+    getSomeUsers: async function (req, res, next) {
+        let id = req.params.id;
+
+        if (!id) {
+            res.json({ code: 0, data: '找不到用户' });
+            return
+        }
+
+        try {
+            const user = await User.select({ id: id });
+            res.json({ code: 200, data: user });
+        }
+        catch (e) {
+            res.json({ error: e.message });
+        }
+    },
     insert: async function (req, res, next) {
         let phone = req.body.phone;
         let password = req.body.password;
@@ -38,8 +54,8 @@ const userController = {
         }
 
         try {
-            const users = await User.update(id, { phone, password });
-            console.log('users', users)
+            const updatNum = await User.update(id, { phone, password });
+            const users = await User.select({id});
             res.json({ code: 200, data: users })
         } catch (e) {
             res.json({ code: 0, message: e.message });

@@ -18,7 +18,7 @@
         <div class="content">
             <div class="article-detail">
                 <h1 class="article-title">{{content.title}}</h1>
-                <div class="article-time">{{content.created_at}}</div>
+                <div class="article-time">{{content.created_at | formatDate}}</div>
                 <div class="article-text">{{content.content}}</div>
             </div>
         </div>
