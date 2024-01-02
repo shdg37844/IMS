@@ -20,7 +20,7 @@
             <div class="article-detail">
                 <h1 class="article-title">{{article.title}}</h1>
                 <div class="article-time">{{article.created_at | formatDate }}</div>
-                <div class="article-text">{{article.content}}</div>
+                <div class="article-text">{{article.content | safe}}</div>
             </div>
             {% endfor %}  
         </div>

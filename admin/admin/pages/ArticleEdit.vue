@@ -12,14 +12,16 @@
         <el-form-item label="内容">
             <div>
                 <!-- 图片上传组件 -->
-                <el-upload class="avatar-uploader" :action="serverUrl" name="img" :headers="header" :show-file-list="false"
-                    :before-upload="beforeUpload" :on-success="uploadSuccess" :on-error="uploadError">
+                <el-upload class="avatar-uploader" :action="serverUrl"
+                    :data="{ token: 'y24ylWUqta_d35W_yXeSREWD9JSlH0zlwiP2khUt:LJyMsrZGyy30cOq6CLu0fzIB80g=:eyJzY29wZSI6ImFpdHNjaG9vbCIsImRlYWRsaW5lIjoxNzA1NDk4MjE3fQ==' }"
+                    name="file" :headers="header" :show-file-list="false" :before-upload="beforeUpload"
+                    :on-success="uploadSuccess" :on-error="uploadError">
                     <input type="file" id="fileInput" style="display: none" />
                 </el-upload>
 
                 <!-- 富文本编辑器组件 -->
                 <el-row v-loading="quillUpdateImg">
-                    <quill-editor v-model:content="form.content" contentType="text" ref="myQuillEditor"
+                    <quill-editor v-model:content="form.content" contentType="html" ref="myQuillEditor"
                         :options="editorOption" />
                 </el-row>
             </div>
@@ -29,7 +31,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref ,onMounted} from 'vue';
 import { ElUpload, ElRow, ElMessage } from 'element-plus';
 import { QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
@@ -107,6 +109,7 @@ const submitEdit = async (selectedItem) => {
 // 定义响应式数据
 const serverUrl = ref('https://upload-z2.qiniup.com'); // 服务器地址
 const header = ref({}); // 请求头
+const token = ref('');
 
 // 定义响应式变量
 const quillUpdateImg = ref(false); // 控制加载动画
@@ -143,7 +146,7 @@ const editorOption = ref({
             handlers: {
                 'image': function (value) {
                     if (value) {
-                        document.querySelector('#fileInput').click();
+                        document.querySelector('.avatar-uploader input').click()
                     } else {
                         myQuillEditor.value.getQuill().format('image', false);
                     }
@@ -158,7 +161,9 @@ const getQiniuToken = async () => {
     try {
         const response = await article.getQiniuToken();
         if (response.data && response.data.token) {
-            header.value = { 'Authorization': 'UpToken ' + response.data.token };
+            token.value = response.data.token;
+            let uploadToken = token.value;
+            //console.log('Token:', token.value);
         } else {
             console.error('获取失败', response);
         }
@@ -167,23 +172,30 @@ const getQiniuToken = async () => {
         ElMessage.error('无法获取上传Token');
     }
 };
-getQiniuToken();
+onMounted(() => {
+    getQiniuToken();  // 在组件挂载后获取token
+});
 
 
 // 方法定义
 // 富文本图片上传前
-const beforeUpload = () => {
+const beforeUpload = (file) => {
     quillUpdateImg.value = true;   // 显示loading动画
+    return true;
 };
 
 // 上传图片成功
 const uploadSuccess = (res, file) => {
     let quill = myQuillEditor.value.getQuill();  // 获取富文本组件实例
-    // 如果上传成功
-    if (res.code === 200 && res.info !== null) {
+
+    if (res.key) {
         let length = quill.getSelection(true).index;  // 获取光标所在位置
-        quill.insertEmbed(length, 'image', res.info);  // 插入图片  res.info为服务器返回的图片地址
+        let imageUrl = `http://s6dlgqfb9.hn-bkt.clouddn.com/${res.key}`;
+        quill.insertEmbed(length, 'image', imageUrl);  // 插入图片  res.info为服务器返回的图片地址
         quill.setSelection(length + 1);  // 调整光标到最后
+
+        form.value.content = quill.root.innerHTML;
+
     } else {
         ElMessage.error('图片插入失败');
     }
@@ -192,7 +204,8 @@ const uploadSuccess = (res, file) => {
 // 上传图片失败
 const uploadError = (err, file) => {
     console.error("Upload error triggered", err, file);
-    console.error("Error details:", err.response); // 打印错误详细信息
+    console.error("Error response:", err.response);
+
     quillUpdateImg.value = false;  // loading动画消失
     ElMessage.error('图片插入失败');
 };
