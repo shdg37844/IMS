@@ -14,7 +14,6 @@
                 <!-- 图片上传组件 -->
                 <el-upload class="avatar-uploader" :action="serverUrl" name="img" :headers="header" :show-file-list="false"
                     :before-upload="beforeUpload" :on-success="uploadSuccess" :on-error="uploadError">
-                    <input type="file" id="fileInput" style="display: none" />
                 </el-upload>
 
                 <!-- 富文本编辑器组件 -->
@@ -79,8 +78,6 @@ const submitCreate = async () => {
     }
 };
 
-
-
 // 定义响应式数据
 const serverUrl = ref('https://upload-z2.qiniup.com'); // 服务器地址
 const header = ref({}); // 请求头
@@ -120,7 +117,7 @@ const editorOption = ref({
             handlers: {
                 'image': function (value) {
                     if (value) {
-                        document.querySelector('#fileInput').click();
+                        document.querySelector('.avatar-uploader input').click()
                     } else {
                         myQuillEditor.value.getQuill().format('image', false);
                     }
@@ -135,7 +132,9 @@ const getQiniuToken = async () => {
     try {
         const response = await article.getQiniuToken();
         if (response.data && response.data.token) {
-            header.value = { 'Authorization': 'UpToken ' + response.data.token };
+            //header.value = { 'Authorization': 'UpToken ' + response.data.token };
+            header.value = response.data.token ;
+            console.log('header token：',header.value);
         } else {
             console.error('获取失败', response);
         }
@@ -162,6 +161,7 @@ const uploadSuccess = (res, file) => {
         quill.insertEmbed(length, 'image', res.info);  // 插入图片  res.info为服务器返回的图片地址
         quill.setSelection(length + 1);  // 调整光标到最后
     } else {
+
         ElMessage.error('图片插入失败');
     }
     quillUpdateImg.value = false;  // loading动画消失
