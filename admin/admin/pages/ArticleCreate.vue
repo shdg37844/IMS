@@ -12,10 +12,9 @@
         <el-form-item label="内容">
             <div>
                 <!-- 图片上传组件 -->
-                <el-upload class="avatar-uploader" :action="serverUrl"
-                    :data="{ token: 'y24ylWUqta_d35W_yXeSREWD9JSlH0zlwiP2khUt:LJyMsrZGyy30cOq6CLu0fzIB80g=:eyJzY29wZSI6ImFpdHNjaG9vbCIsImRlYWRsaW5lIjoxNzA1NDk4MjE3fQ==' }" 
-                    name="file" :headers="header" :show-file-list="false" :before-upload="beforeUpload"
-                    :on-success="uploadSuccess" :on-error="uploadError">
+                <el-upload class="avatar-uploader" :action="serverUrl" :data="{ 'token': token }" name="file" :headers="header"
+                    :show-file-list="false" :before-upload="beforeUpload" :on-success="uploadSuccess"
+                    :on-error="uploadError">
                 </el-upload>
 
                 <!-- 富文本编辑器组件 -->
@@ -45,7 +44,6 @@ const form = ref({
     category: null,
     content: '',
 })
-
 const fetchData = async () => {
     try {
         const response = await classify.getAllClassify();
@@ -59,9 +57,8 @@ const fetchData = async () => {
     }
 }
 fetchData();
-
 const submitCreate = async () => {
-    
+
     const articleContent = {
         title: form.value.title,
         category: form.value.category,
@@ -70,11 +67,11 @@ const submitCreate = async () => {
     try {
         const response = await article.insertArticle(articleContent);
         if (response.data.code === 200) {
-            console.log('文章内容：',form.value.content)
-            form.value = { title: '', category: null, content: ''};
+            console.log('文章内容：', form.value.content)
+            form.value = { title: '', category: null, content: '' };
             alert('新建成功');
             router.push('/admin/article')
-            
+
         } else {
             console.error(response.data.message);
         }
@@ -82,7 +79,6 @@ const submitCreate = async () => {
         console.error(e);
     }
 };
-
 
 // 定义响应式数据
 const serverUrl = ref('https://upload-z2.qiniup.com'); // 服务器地址
@@ -140,8 +136,6 @@ const getQiniuToken = async () => {
         const response = await article.getQiniuToken();
         if (response.data && response.data.token) {
             token.value = response.data.token;
-            let uploadToken = token.value;
-            //console.log('Token:', token.value);
         } else {
             console.error('获取失败', response);
         }
@@ -154,7 +148,6 @@ onMounted(() => {
     getQiniuToken();  // 在组件挂载后获取token
 });
 
-
 // 方法定义
 // 富文本图片上传前
 const beforeUpload = (file) => {
@@ -166,7 +159,7 @@ const beforeUpload = (file) => {
 const uploadSuccess = (res, file) => {
     let quill = myQuillEditor.value.getQuill();  // 获取富文本组件实例
 
-    if ( res.key) {
+    if (res.key) {
         let length = quill.getSelection(true).index;  // 获取光标所在位置
         let imageUrl = `http://s6dlgqfb9.hn-bkt.clouddn.com/${res.key}`;
         quill.insertEmbed(length, 'image', imageUrl);  // 插入图片  res.info为服务器返回的图片地址
