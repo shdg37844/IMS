@@ -12,11 +12,9 @@
         <el-form-item label="内容">
             <div>
                 <!-- 图片上传组件 -->
-                <el-upload class="avatar-uploader" :action="serverUrl"
-                    :data="{ token: 'y24ylWUqta_d35W_yXeSREWD9JSlH0zlwiP2khUt:LJyMsrZGyy30cOq6CLu0fzIB80g=:eyJzY29wZSI6ImFpdHNjaG9vbCIsImRlYWRsaW5lIjoxNzA1NDk4MjE3fQ==' }"
-                    name="file" :headers="header" :show-file-list="false" :before-upload="beforeUpload"
-                    :on-success="uploadSuccess" :on-error="uploadError">
-                    <input type="file" id="fileInput" style="display: none" />
+                <el-upload class="avatar-uploader" :action="serverUrl" :data="{ 'token': token }" name="file"
+                    :headers="header" :show-file-list="false" :before-upload="beforeUpload" :on-success="uploadSuccess"
+                    :on-error="uploadError">
                 </el-upload>
 
                 <!-- 富文本编辑器组件 -->
@@ -31,7 +29,7 @@
 </template>
 
 <script setup>
-import { ref ,onMounted} from 'vue';
+import { ref, onMounted } from 'vue';
 import { ElUpload, ElRow, ElMessage } from 'element-plus';
 import { QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
